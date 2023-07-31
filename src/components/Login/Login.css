@@ -1,0 +1,42 @@
+.bg-container{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.signinBtn {
+    font-size: 30px;
+    margin-bottom: 0px;
+    border-bottom: 1px solid black;
+}
+.form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 50vh;
+    width: 40vh;
+    padding: 20px;
+}
+.label{
+    margin-top: 15px;
+    margin-bottom: 10px;
+    
+}
+.input-el{
+    height: 30px;
+    width: 100%;
+}
+.selectTag{
+    height: 38px;
+    width: 103%;
+}
+.options{
+    font-weight: 400;
+}
+.login-button{
+    margin-top: 18px;
+    height: 37px;
+    width: 130px;
+    align-self: center;
+}
