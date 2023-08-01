@@ -1,15 +1,14 @@
-import React from 'react'
-// import {useSelector} from "react-redux"
-import {Navigate, useLocation} from "react-router-dom"
+import React, { useContext } from 'react'
+import {Navigate} from "react-router-dom"
+import { GlobalContext } from '../Context/QuestionContext';
 
 const ProtectedRoute = ({children}) => {
-    // const user = useSelector((state) => state.user);
-    let location = useLocation();
+    const {isUserlogged} = useContext(GlobalContext)
 
-    if(true) {
-        return <Navigate to="/login" state={{ from: location}} replace />
+    if(!isUserlogged) {
+        return <Navigate to="/login"  />
     }
-//  return children
+ return children
 
 };
 

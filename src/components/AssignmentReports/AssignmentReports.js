@@ -32,6 +32,7 @@ function AssignmentReports() {
     setUserClass('')
     setUserSection('')
     setUsername('')
+    setAssignments([])
   }
   const handleSearch = () => {
     setNoData(false)

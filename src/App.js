@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 function App() {
   return (
@@ -12,7 +13,9 @@ function App() {
         <Header/>
         <Routes>
           <Route exact path='/login' Component={Login}/>
-          <Route exact path='/' Component={Home} />
+          <Route exact path='/' element={<ProtectedRoute>
+            <Home/>
+          </ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </QuestionContext>

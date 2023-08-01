@@ -68,6 +68,11 @@ export default function FormDialog({dialogProps, setdialogProps}) {
           date: new Date().toLocaleDateString(),
           status: 'Pending',
           modifiedAt: '-',
+          studentDetails: {
+            name: 'Gangadhar',
+            standard: '10th',
+            section: 'C'
+        },
         }])
       }
       setdialogProps({...dialogProps, status: false, modalType: 'Create'})

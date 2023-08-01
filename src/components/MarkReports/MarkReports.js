@@ -49,10 +49,17 @@ function MarkReports() {
     const [chartData, setChartData] = useState(data['All_Subjects'])
 
     const handleReportTypeChange = (event, newValue) => {
-        setSubject(subjectFilters[0])
-        setCurrentClass(classFilters[0])
-        setChartData(data[subjectFilters[0]])
-        setReportType(newValue)
+        if(newValue !== null) {
+            setSubject(subjectFilters[0])
+            setCurrentClass(classFilters[0])
+            setReportType(newValue)
+            if(newValue === chartFilters[2]){
+                getFilteredData(subject, currentClass)
+                return 
+            }
+            setChartData(data[subjectFilters[0]])
+
+        }
     }
     const getFilteredData = (subject, selectedClass) => {
         const students = data[selectedClass]
@@ -60,17 +67,22 @@ function MarkReports() {
         setChartData(newChartData)
     }
     const handleChangeSubject = (event, newValue) => {
-        setSubject(newValue)
-        if(reportType === chartFilters[2]){
-            getFilteredData(newValue, currentClass)
-            return 
+        if(newValue !== null){
+            setSubject(newValue)
+            if(reportType === chartFilters[2]){
+                getFilteredData(newValue, currentClass)
+                return 
+            }
+            setChartData(data[newValue])
         }
-        setChartData(data[newValue])
     }
     const handleClassChange = (event, newValue) => {
-        setCurrentClass(newValue)
-        getFilteredData(subject, newValue)
+        if (newValue !== null){
+            setCurrentClass(newValue)
+            getFilteredData(subject, newValue)
+        }
     }
+
   return (
     <div style={{width: '100%', paddingTop: '20px'}}>
         <div style={{display: 'flex', flexWrap: 'wrap',width: '100%', gap: '30px'}}>

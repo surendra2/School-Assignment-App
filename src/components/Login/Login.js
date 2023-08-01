@@ -34,7 +34,7 @@ function Login(props) {
   return (
     <div className='bg-container'>
         <h1 className='signinBtn'>Sign in</h1>
-        <form className='form-container' onClick={handleSubmit}>
+        <form className='form-container' onSubmit={handleSubmit}>
         <label className='label' htmlFor='usertype'>User type</label>
             <select className='selectTag' onChange={handleUserType}>
               <option className='options' value='Student'>Student</option>
