@@ -54,7 +54,7 @@ function MarkReports() {
             setCurrentClass(classFilters[0])
             setReportType(newValue)
             if(newValue === chartFilters[2]){
-                getFilteredData(subject, currentClass)
+                getFilteredData(subjectFilters[0], currentClass)
                 return 
             }
             setChartData(data[subjectFilters[0]])
