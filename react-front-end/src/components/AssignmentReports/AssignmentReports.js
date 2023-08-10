@@ -4,19 +4,38 @@ import { TextField } from '@mui/material';
 import AssignmentCard from '../AssignmentCard/AssignmentCard';
 import { GlobalContext } from '../Context/QuestionContext';
 import './AssignmentReportsStyle.css'
+import { fetchStudentAssignments, fetchStudents } from '../Services/userService';
 
-const dummyUsers = ['Gangadhar', 'Naveen']
 
 function AssignmentReports() {
+  const [sudentsData, setStudentsData] = useState({data: {}, studentsList: []})
   const [username, setUsername] = React.useState('');
   const [userClass, setUserClass] = useState('')
   const [userSection, setUserSection] = useState('')
-  const [assignments, setAssignments] = useState([])
+  const {assignments, setAssignments} = React.useContext(GlobalContext)
   const [noData, setNoData] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const globalData = useContext(GlobalContext)
+  
 
+  const getStudnetsData = async  () => {
+    setLoading(true)
+    try {
+      const response = await fetchStudents()
+      console.log('students data', response)
+      const studentsList = response.data.map(each => each.userName)
+      setStudentsData({data: response.data, studentsList})
+      setLoading(false)
+    } catch (error) {
+      console.log('Students Data Fetcing Error.', error)
+      setLoading(false)
+    }
+  }
 
+  useEffect( () => {
+    setAssignments([])
+    getStudnetsData()
+  },[])
 
   const handleChangeUsername = (event, newValue) => {
     setUsername(newValue);
@@ -33,22 +52,32 @@ function AssignmentReports() {
     setUserSection('')
     setUsername('')
     setAssignments([])
-  }
-  const handleSearch = () => {
     setNoData(false)
+  }
+  const handleSearch = async() => {
     setAssignments([])
-    const filteredAsigns = globalData.assignments.filter(each => {
-      const {name, standard, section } = each.studentDetails
-      if((name === username|| standard === userClass || section === userSection) && each.status === 'Completed' ){
-        return true
+    let studentId = null 
+    for(let item of sudentsData.data){
+      if(item.userName === username){
+        studentId = item._id
+        break
       }
-      return false
-    })
-    filteredAsigns.length === 0 ? setNoData(true) : setAssignments(filteredAsigns)
+    }
+    try {
+      const response = await fetchStudentAssignments(studentId)
+      response.data.length === 0 ? setNoData(true) : setAssignments(response.data)
+    } catch (error) {
+      setNoData(true)
+      console.log('Error while fetching Student submitted Assignments', error)
+    }
+    
   }
 
   return (
     <div className='user-sub-conainer'>
+        {loading && <h1>Loading.....</h1>}
+        {!loading && 
+        <>
         <div className='filters-container'>
           <p className='sub-heading'>Use student details in filters.</p>
           <Autocomplete
@@ -56,7 +85,7 @@ function AssignmentReports() {
             id="combo-box-demo"
             onChange={handleChangeUsername}
             value={username}
-            options={dummyUsers}
+            options={sudentsData.studentsList}
             renderInput={(params) => <TextField {...params} label="Student Name" />}
           />
           <TextField
@@ -87,6 +116,7 @@ function AssignmentReports() {
             </div>
         </div>
         <AssignmentCard assignments={assignments} noData={noData}/>
+        </>}
       </div>
   )
 }

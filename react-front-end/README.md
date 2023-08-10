@@ -1,5 +1,57 @@
 # Getting Started with Create React App
-SHA256:WLchwvX2Z+Fi6zQ+MsCPCxv8lX8KhVvB6FdKACovIyE thatigangadhar4@gmail.com
+
+Description :
+The goal of this project is to create an assignment system with the following four
+key components: Students can complete their homework online, as we can infer that this is
+a private school application. And there are also two types of users who can login to this
+project: students and faculty.
+
+Key Features:
+● Faculty can create assignments for students.
+● Students should attend a faculty-created assignment.
+● Faculty should view the student's individual assignments.
+● Students should view assignment results.
+
+1. Faculty can create an assignment for students.
+
+➔ Assignment Title
+◆ Question 1
+◆ Options : [MCQ] - Multi Choose Question
+◆ Correct Answers
+
+2. Students should attend a faculty-created assignment.
+
+➔ View All Assignments
+➔ View particular Assignment. (With Questions&Option)
+➔ Attend the assignment.
+
+*Students attended assignments to store user modules. And that should be Array of
+Embedded.
+3. Faculty should view the students' individual assignments.
+
+➔ View All Students Assignments
+➔ View a particular student's assignment. (With Questions,Option,StudentMark)
+
+4. Students should view the assignment results.
+➔ View student attended assignments.
+➔ View particular attended assignment Result. (With
+Questions,Option,SelectedAnswer&CorrectAnser).
+
+Total modules included:
+● User
+● Assignment
+*Important When students are present for the assignment, you shouldn't make any
+changes to the assignment model.
+*All requests should be recorded for postman collection.
+
+Mark Reports from Students:
+This project aims to provide a student mark report system with data visualization.
+
+Types of Reports:
+● Student Mark Wise reports.
+● Student Subject Wise Mark reports.
+● Student Class Wise Mark reports
+*Important: Every chart report should also have data tables.
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -1,5 +1,5 @@
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../Context/QuestionContext'
 import FormDialog from '../utils/Modal'
 import TestModal from '../utils/TestModal'
@@ -11,6 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { getAssignments } from "../Services/Services";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,7 +35,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 function Assignment() {
-    const {assignments} = useContext(GlobalContext)
+    const {assignments, setAssignments} = useContext(GlobalContext)
+
     const [dialogProps, setdialogProps] = useState(
       {status: false,
         dialogTitle: 'Create Your Own Questions',
@@ -49,6 +51,20 @@ function Assignment() {
     const studentHeaders = ['Assigned At', 'Completed At', 'Status', 'Action']
     const headers = userType === 'Student' ? studentHeaders : facultyHeaders
     
+    const fetchAssignments = async () => {
+      try {
+          const response = await getAssignments()
+          console.log('response mongo db', response)
+          setAssignments(response.data)
+      } catch (error) {
+          console.log(`Error: ${error}`)
+      }
+  }
+
+  useEffect( () => {
+      fetchAssignments()
+  }, [])
+
     const rows = assignments.map(each => {
       if (userType === 'Student'){
         return {title: each.title, createdAt: each.date, completedAt: each.completedAt,
@@ -78,7 +94,7 @@ function Assignment() {
   
   return (
     <div style={{width: '100%'}}>
-        <TestModal openAssignment={openAssignment} setOpenAssignment ={setOpenAssignment}/>
+        <TestModal openAssignment={openAssignment} fetchAssignments={fetchAssignments} setOpenAssignment ={setOpenAssignment}/>
         <FormDialog dialogProps={dialogProps} setdialogProps={setdialogProps}/>
         <div style={{width: '100%'}}>
           <div style={{width: '100%'}}>

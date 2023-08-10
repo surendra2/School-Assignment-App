@@ -5,14 +5,16 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
+import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from '../Context/QuestionContext';
 import './TestModal.css'
+import { submitAssignment } from '../Services/Services';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function TestModal({openAssignment, setOpenAssignment}) {
+export default function TestModal({openAssignment, setOpenAssignment, fetchAssignments}) {
 
   const {assignments, setAssignments} = React.useContext(GlobalContext)
   const [questions, setQuestion] = React.useState([])
@@ -44,38 +46,44 @@ export default function TestModal({openAssignment, setOpenAssignment}) {
          index: currentQuestion.index - 1, 
          userAns: anwseredQuesiton[questions[currentQuestion.index - 1].questionNo]})
   }
-  const handleClose = () => {
-    let totalCorrectAns = 0;
-    const ansQuestions = assignmentDetails.questions.map((each) => {
-      each['userAns'] = anwseredQuesiton[each.questionNo]
-      if(each['userAns'] === each.originalAns){
-        totalCorrectAns += 1
+  const handleClose = async (event) => {
+
+    if (event.target.innerText === 'SUBMIT'){
+      // let ansAsignment = null;
+      // const ansQuestions = assignmentDetails.questions.map((each) => {
+      //   each['userAns'] = anwseredQuesiton[each.questionNo]
+      //   return each
+      // })
+      // const updatedAssignment = assignments.map((each) => {
+      //   if (each.id === openAssignment.id){
+      //     ansAsignment = {
+      //       ...assignmentDetails,
+      //        status: 'Completed',
+      //         questions: ansQuestions,
+      //     totalQue: assignmentDetails.questions.length,
+      //      completedAt: new Date().toLocaleDateString()}
+      //   return ansAsignment
+      //   }
+      //   return each
+      // })
+      const data = {
+        id: openAssignment.id,
+        quesnAns: anwseredQuesiton
       }
-      return each
-    })
-    const updatedAssignment = assignments.map((each) => {
-      if (each.id === openAssignment.id){
-        return {...assignmentDetails, status: 'Completed', questions: ansQuestions,
-         totalQue: assignmentDetails.questions.length,
-        totalAns: totalCorrectAns, completedAt: new Date().toLocaleDateString(),studentDetails: {
-          name: 'Gangadhar',
-          standard: '10th',
-          section: 'C'
-      },}
+      try {
+        const response = await submitAssignment(data)
+        fetchAssignments()
+        console.log("Stduent Completed Assignment", response)
+      } catch (error) {
+        console.log('Error while Submiting assignment', error)
       }
-      return each
-    })
-    setAssignments(updatedAssignment)
+    }
     setOpenAssignment({...openAssignment,status: false, id: 0})
   };
 
   const handleOptionChange = (event) => {
     setAnwseredQuestion({...anwseredQuesiton, [currentQuestion.questionNo]: event.target.value})
   }
-
-  React.useEffect(() => {
-    console.log(anwseredQuesiton) 
-  })
 
   const getResultOptionCard = (question) => {
     

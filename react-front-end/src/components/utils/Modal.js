@@ -8,6 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { GlobalContext } from '../Context/QuestionContext';
 import { v4 as uuidv4 } from 'uuid';
+import { createAssignment, updateAssignment } from '../Services/Services';
 
 export default function FormDialog({dialogProps, setdialogProps}) {
 
@@ -51,29 +52,42 @@ export default function FormDialog({dialogProps, setdialogProps}) {
     },[dialogProps, assignments])
    
     
-    const handleAddAssignment = () => {
+    const handleAddAssignment = async () => {
       if (dialogProps.modalType === 'Update'){
+        let updatedAsign = null 
         const updatedAssigments = assignments.map(each => {
+          
           if (dialogProps.assignmentId === each.id){
-            return {...each, questions, title, modifiedAt: new Date().toLocaleDateString()}
+              updatedAsign = {...each, questions, title, modifiedAt: new Date().toLocaleDateString()}
+            return updatedAsign
           }
           return each
         })
-        setAssignments(updatedAssigments)
+
+        try {
+          const response = await updateAssignment(updatedAsign)
+          setAssignments(updatedAssigments)
+          console.log("assignment Updated", response)
+        } catch (error) {
+          console.log('Error while Creating', error)
+        }
       }else {
-        setAssignments([...assignments, {
+        const data = {
           id: uuidv4(),
           title,
           questions,
           date: new Date().toLocaleDateString(),
           status: 'Pending',
           modifiedAt: '-',
-          studentDetails: {
-            name: 'Gangadhar',
-            standard: '10th',
-            section: 'C'
-        },
-        }])
+          completedAt: '-',
+        }
+        try {
+          const response = await createAssignment(data)
+          setAssignments([...assignments, response.data])
+          console.log("assignment created", response)
+        } catch (error) {
+          console.log('Error while Creating', error)
+        }
       }
       setdialogProps({...dialogProps, status: false, modalType: 'Create'})
       setTitle('')
